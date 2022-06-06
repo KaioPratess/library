@@ -15,6 +15,7 @@ tableSelector.addEventListener('click', () => {
   tBody.innerHTML = '';
   displayTable();
 });
+
 cardSelector.addEventListener('click', () => {
   cards.classList.add("in-view");
   table.classList.remove("in-view");
@@ -25,28 +26,26 @@ cardSelector.addEventListener('click', () => {
 
 let library = [];
 
-  const libraryMethods = {
-    addBook: function() {
-      library.push(this)
+  class Book {
+    constructor(title, author, pages, releaseYear, read, img) {
+      this.title = title;
+      this.author = author;
+      this.pages = pages;
+      this.releaseYear = releaseYear;
+      this.read = read;
+      this.img = img;
+    }
+
+    static addBook = function(book) {
+      library.push(book)
     }
   }
-
-function Book(title, author, pages, releaseYear, read, img) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.releaseYear = releaseYear;
-  this.read = read;
-  this.img = img;
-}
-
-Book.prototype = Object.create(libraryMethods);
 
 const theHobbit = new Book('The Hobbit', 'JJR Tolkien', '270', '1937', 'no', './img/book.jpg' );
 const harryPotter = new Book('Harry Potter', 'JK Rowling', '400', '1999', 'no', './img/book.jpg');
 
-theHobbit.addBook();
-harryPotter.addBook();
+Book.addBook(theHobbit);
+Book.addBook(harryPotter);
 
 function displayCards() {
     library.forEach((book) => {
@@ -114,6 +113,7 @@ function displayTable() {
             removeBtn.classList.add('remove-btn');
             removeBtn.addEventListener('click', removeBook);
       for(key in book) {
+        console.log(book)
         if(book.hasOwnProperty(key)) {
           const value = book[key];
           const cell = document.createElement('td');
@@ -173,7 +173,7 @@ function saveBook() {
     array.push(input.value);
   });
   const newBook = new Book(...array);
-  newBook.addBook();
+  Book.addBook(newBook);
   register.style.display = 'none';
   displayTable();
   displayCards();
