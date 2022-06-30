@@ -77,7 +77,6 @@ function displayCards() {
               } else {
                 book.read = "no"
               }
-              console.log(book)
             })
             readI.setAttribute('name', 'read');
       const bin = document.createElement('img');
@@ -113,7 +112,6 @@ function displayTable() {
             removeBtn.classList.add('remove-btn');
             removeBtn.addEventListener('click', removeBook);
       for(key in book) {
-        console.log(book)
         if(book.hasOwnProperty(key)) {
           const value = book[key];
           const cell = document.createElement('td');
@@ -166,17 +164,21 @@ function removeBook(event) {
 }
 
 function saveBook() {
-  tBody.innerHTML = '';
-  cards.innerHTML = '';
-  const array = [];
-  inputs.forEach((input) => {
-    array.push(input.value);
-  });
-  const newBook = new Book(...array);
-  Book.addBook(newBook);
-  register.style.display = 'none';
-  displayTable();
-  displayCards();
+  if(checkValidity()) {
+    tBody.innerHTML = '';
+    cards.innerHTML = '';
+    const array = [];
+    inputs.forEach((input) => {
+      array.push(input.value);
+    });
+    const newBook = new Book(...array);
+    Book.addBook(newBook);
+    register.style.display = 'none';
+    displayTable();
+    displayCards();
+  } else {
+      alert('Fill in the fields')
+  }
 }
 
 function openRegister() {
@@ -196,3 +198,16 @@ saveBtn.addEventListener('click', saveBook);
 
 displayTable();
 displayCards();
+
+// Validation
+function checkValidity() {
+  inputs.forEach((input) => {
+    library.forEach((book) => {
+      if(input.validity.valid) {
+        return true
+      } else {
+          return false
+      }
+    })
+  })
+}
