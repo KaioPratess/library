@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Project</title>
+  <script type="module" src="./main.js" defer></script>
+</head>
+
+<body>
+  <header class="header">
+    <h1>Library</h1>
+  </header>
+  <main class="main">
+    <div class="options">
+      <div class="add-btn">+</div>
+      <fieldset class="view">
+        <legend>Select View</legend>
+        <img src="./728a1e1e878e6b1c2646.png" alt="table" class="select-table">
+        <img src="./3313624ef270737c883a.png" alt="card" class="select-card">
+      </fieldset>
+    </div>
+    <div class="table-view in-view">
+      <table>
+        <thead>
+          <tr>
+            <th scope="colgroup">Title</th>
+            <th scope="colgroup">Author</th>
+            <th scope="colgroup">Pages</th>
+            <th scope="colgroup">Release Year</th>
+            <th scope="colgroup">Read</th>
+          </tr>
+        </thead>
+        <tbody class="tbody"></tbody>
+      </table>
+    </div>
+    <div class="card-view"></div>
+  </main>
+  <div class="register-bg">
+    <div class="register">
+      <div class="close">X</div>
+      <div>
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" maxlength="40" data-key="0" required>
+      </div>
+      <div>
+        <label for="author">Author</label>
+        <input type="text" id="author" name="author" maxlength="40" data-key="1" required>
+      </div>
+      <div>
+        <label for="pages">Pages</label>
+        <input type="number" id="pages" name="pages" min="0" data-key="2" required>
+      </div>
+      <div>
+        <label for="release">Release Year</label>
+        <input type="number" id="release" name="release" min="0" data-key="3" required>
+      </div>
+      <div>
+        <label for="img">Cover Image</label>
+        <input type="file" name="image" id="img" accept="image/png, image/jpeg">
+      </div>
+      <button type="button" class="btn">New Book</button>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Made by KaioPratess</p>
+  </footer>
+</body>
+
+</html>
