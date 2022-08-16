@@ -1,10 +1,14 @@
 import initFirebase from './firebase';
+import { initializeApp } from "firebase/app";
 import './style.css';
 import trash from '../img/bin.png';
 import remove from '../img/remove.png';
 import book from '../img/book.jpg';
 import header from '../img/header.png';
 import grid from '../img/grid.png';
+import { collection, addDoc, getFirestore, getDocs, doc, deleteDoc} from "firebase/firestore";
+
+initFirebase();
 
 const img1 = header;
 const img2 = grid;
@@ -38,19 +42,47 @@ cardSelector.addEventListener('click', () => {
 let library = [];
 
   class Book {
-    constructor(title, author, pages, releaseYear, read, img) {
+    constructor(title, author, pages, releaseYear, read, img, key) {
       this.title = title;
       this.author = author;
       this.pages = pages;
       this.releaseYear = releaseYear;
       this.read = read;
       this.img = img;
+      this.key = key;
     }
 
     static addBook = function(book) {
       library.push(book)
     }
   }
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4hRhZgzrKfedzhSos5i9exPce6nC1R_w",
+    authDomain: "library-fa401.firebaseapp.com",
+    projectId: "library-fa401",
+    storageBucket: "library-fa401.appspot.com",
+    messagingSenderId: "824732299942",
+    appId: "1:824732299942:web:bcb35f795f51b7ca7afa67"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function retrieveDB() {
+    const querySnapshot = await getDocs(collection(db, "books"));
+    querySnapshot.forEach((doc) => {
+      const obj = doc['_document'].data.value.mapValue.fields;
+     const newBook = new Book (obj.title.stringValue, obj.author.stringValue, obj.pages.stringValue, obj.releaseYear.stringValue, '', '', doc['_key'].path.segments[6]);
+     Book.addBook(newBook);
+     tBody.innerHTML = '';
+     cards.innerHTML = '';
+     displayTable();
+     displayCards();
+    });
+  }
+
+retrieveDB()
 
 const theHobbit = new Book('The Hobbit', 'JJR Tolkien', '270', '1937', 'no', book );
 const harryPotter = new Book('Harry Potter', 'JK Rowling', '400', '1999', 'no', book);
@@ -127,6 +159,9 @@ function displayTable() {
           const value = book[key];
           const cell = document.createElement('td');
           cell.textContent = value;
+          if(key === 'key') {
+              cell.style.display = 'none'
+          }
           if(key === 'read') {
             const checkBox = document.createElement('input');
                   checkBox.setAttribute('type', 'checkbox');
@@ -156,6 +191,12 @@ function displayTable() {
 }
 
 function removeBook(event) {
+  const deleteFromDB = async () => {
+    const key = event.target.parentElement.nextSibling.nextSibling.textContent;
+    await deleteDoc(doc(db, "books", key));
+  }
+  deleteFromDB()
+
   if(table.classList.contains('in-view')) {
     const row = event.path[2];
     row.remove();
@@ -184,9 +225,9 @@ function saveBook() {
     });
     const newBook = new Book(...array);
     Book.addBook(newBook);
-    register.style.display = 'none';
-    displayTable();
     displayCards();
+    displayTable();
+    register.style.display = 'none';
   } else {
       alert('Fill in the fields')
   }
